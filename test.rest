@@ -1,0 +1,19 @@
+@host = http://localhost:8008
+
+
+######
+GET{{host}}
+
+#####
+POST {{host}}/photographer
+Content-Type: application/json
+
+
+{
+  "name":"lilian",
+  "email":"bvbvb@gmail.com",
+  "password":"djfbbjdd",
+  "company": "the good company",
+  "clientname": "Muller"
+}
+
