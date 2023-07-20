@@ -11,6 +11,7 @@ const createPhotographer = async (req, res) => {
       clientname,
     });
     res.json(newEntry);
+    console.log("req.body", req.body);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

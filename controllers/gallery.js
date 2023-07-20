@@ -6,6 +6,7 @@ const createGallery = async (req, res) => {
     const newGallery = await Gallery.create({
       name,
       price,
+      clientId,
     });
     res.json(newGallery);
   } catch (error) {
