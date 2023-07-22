@@ -1,26 +1,37 @@
-const image = require("../models/image");
-const { uploadFile } = require("../middleswares/s3_middleware");
+const Image = require("../models/image");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { GetObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+require("dotenv").config();
+
+const bucketName = process.env.BUCKET_NAME;
 
 const createImage = async (req, res) => {
-  try {
-    const file = req.file;
-    console.log(file);
-    // probably do an error handling function here
-    const result = await uploadFile(file);
-    console.log(result);
-    const description = req.body.description;
-    // res.send("Done!");
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-const getImage = async (req, res) => {
-  try {
-    const newImage = await Image.find();
-    res.json(newImage);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  const { file } = req;
+  const { id, name } = req.body;
+  const newImage = await Image.create({
+    id,
+    name,
+  });
+  res.json(newImage);
 };
 
-module.exports = { createImage, getImage };
+const getImage = async (req, res) => {
+  const images = await Image.find();
+  for (let image of images) {
+    // For each image, generate a signed URL and save it to the image object
+    image.imageUrl = await getSignedUrl(
+      S3Client,
+      new GetObjectCommand({
+        Bucket: bucketName,
+        Key: image.imageName,
+      }),
+      { expiresIn: 3600 }
+    );
+  }
+
+  res.send(images);
+};
+
+const deleteImage = async (req, res) => {};
+
+module.exports = { createImage, getImage, deleteImage };

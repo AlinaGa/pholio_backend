@@ -5,9 +5,7 @@ const clientRouter = require("./routes/client");
 const galleryRouter = require("./routes/gallery");
 const imageRouter = require("./routes/image");
 const multer = require("multer");
-const sharp = require("sharp");
-const path = require("path");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+
 require("dotenv/config");
 require("./db");
 
