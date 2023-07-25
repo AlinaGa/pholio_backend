@@ -1,13 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+require("dotenv/config");
 const photographerRouter = require("./routes/photographers");
 const clientRouter = require("./routes/client");
 const galleryRouter = require("./routes/gallery");
 const imageRouter = require("./routes/image");
 const multer = require("multer");
-
-require("dotenv/config");
-require("./db");
+require("./db.js");
 
 const app = express();
 const port = 8000;
@@ -15,6 +15,7 @@ const port = 8000;
 //Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/photographer", photographerRouter);
 app.use("/client", clientRouter);

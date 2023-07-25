@@ -2,9 +2,15 @@ const mongoose = require("mongoose");
 
 const photographerSchema = new mongoose.Schema({
   id: Number,
-  name: { type: String, required: [true, "Add name"] },
+  name: { type: String },
   email: { type: String, required: [true, "Add email"] },
-  password: { type: String, required: [true, "Add password"], minlength: 5 },
+  password: {
+    type: String,
+    required: [true, "Add password"],
+    minlength: 5,
+    select: false,
+  },
+  role: { type: String, enum: ["admin"], default: "admin" },
   company: String,
 });
 

@@ -12,6 +12,7 @@ const storage = multer.diskStorage({
 // error handling incorrect file formats
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image/")) {
+    // if (file.mimetype) {
     cb(null, true);
   } else {
     cb(new Error("invalid file type"), false);
