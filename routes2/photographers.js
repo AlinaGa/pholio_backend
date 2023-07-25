@@ -1,18 +1,25 @@
 const express = require("express");
 const {
-  createPhotographer,
+  getPhotographers,
   getPhotographer,
+  createPhotographer,
   getPhotographerByCompany,
   updatePhotographer,
   deletePhotographer,
-} = require("../controllers/photographer");
+} = require("../controllers2/photographer");
 
 const photographerRouter = express.Router();
 
 photographerRouter.post("/", createPhotographer);
-photographerRouter.get("/", getPhotographer);
-photographerRouter.get("/company", getPhotographerByCompany);
+
+photographerRouter.get("/", getPhotographers);
+
+photographerRouter.get("/:id", getPhotographer);
+
+photographerRouter.get("/company/:companyname", getPhotographerByCompany);
+
 photographerRouter.put("/:id", updatePhotographer);
+
 photographerRouter.delete("/:id", deletePhotographer);
 
 module.exports = photographerRouter;
