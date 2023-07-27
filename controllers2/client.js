@@ -1,13 +1,10 @@
 const pool = require("../db");
 
-
 //  MUST BE UPDATED ACCORDING TO THE CONTENT OF THE TABLE
-
-
 
 const getClients = async (req, res) => {
   try {
-    const { rows, rowCount } = await pool.query("SELECT * FROM cli;");
+    const { rows, rowCount } = await pool.query("SELECT * FROM client;");
 
     res.json(rows);
   } catch (error) {
@@ -67,10 +64,7 @@ const deleteClient = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = await pool.query(
-      "DELETE FROM clients WHERE id=$1;",
-      [id]
-    );
+    const result = await pool.query("DELETE FROM clients WHERE id=$1;", [id]);
 
     res.json(result);
   } catch (error) {
