@@ -9,28 +9,31 @@ const imageRouter = require("./routes/image");
 const multer = require("multer");
 require("./db.js");
 const { errorHandler } = require("./middleswares/ErrorHandler");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-
-const { GetObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+// const { GetObjectCommand, S3Client } = require("@aws-sdk/client-s3");
 
 const app = express();
 const port = 8000;
 
-const bucketName = process.env.BUCKET_NAME;
-const bucketRegion = process.env.BUCKET_REGION;
-const accessKey = process.env.ACCESS_KEY;
-const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+// const bucketName = process.env.BUCKET_NAME;
+// const bucketRegion = process.env.BUCKET_REGION;
+// const accessKey = process.env.ACCESS_KEY;
+// const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 
-const s3 = new S3Client({
-  credentials: {
-    accessKeyId: accessKey,
-    secretAccessKey: secretAccessKey,
-  },
-  region: bucketRegion,
-});
+// const s3 = new S3Client({
+//   credentials: {
+//     accessKeyId: accessKey,
+//     secretAccessKey: secretAccessKey,
+//   },
+//   region: bucketRegion,
+// });
 
 //Middlewares
-app.use(cors());
+app.use(
+  cors()
+  // origin:
+  // credentials: true;
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -60,22 +63,22 @@ app.use(cookieParser());
 //   }
 // });
 
-app.get("/test", async (req, res) => {
-  const uploadParams = {
-    Bucket: bucketName,
-    Key: "2_tn.jpg",
-  };
+// app.get("/test", async (req, res) => {
+//   const uploadParams = {
+//     Bucket: bucketName,
+//     Key: "2_tn.jpg",
+//   };
 
-  const command = new GetObjectCommand(uploadParams);
+//   const command = new GetObjectCommand(uploadParams);
 
-  try {
-    // const { Body } = await s3.send(command);
-    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-    res.send(url);
-  } catch (err) {
-    console.log("Error", err);
-  }
-});
+//   try {
+//     // const { Body } = await s3.send(command);
+//     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+//     res.send(url);
+//   } catch (err) {
+//     console.log("Error", err);
+//   }
+// });
 
 app.use("/photographer", photographerRouter);
 app.use("/client", clientRouter);

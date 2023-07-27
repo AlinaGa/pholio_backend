@@ -1,7 +1,10 @@
 const Image = require("../models/image");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const { GetObjectCommand, S3Client } = require("@aws-sdk/client-s3");
-require("dotenv").config();
+const {
+  GetObjectCommand,
+  S3Client,
+  paginateListObjectsV2,
+} = require("@aws-sdk/client-s3");
 
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
@@ -25,6 +28,21 @@ const s3 = new S3Client({
   },
   region: bucketRegion,
 });
+// the addded part
+// const getAllS3Files = async (client: S3Client, s3Opts) => {
+//   const totalFiles = [];
+//   for await (const data of paginateListObjectsV2({ client }, s3Opts)) {
+//     totalFiles.push(...(data.Contents ?? []));
+//   }
+//   return totalFiles;
+// };
+
+// const main = async () => {
+//   const client = new S3Client(s3Config);
+//   const s3Opts = { Bucket: "bucketName" };
+//   console.log(await getAllS3Files(client, s3Opts));
+// };
+//end of the added part
 const getImage = async (req, res, next) => {
   const { gallery } = req.query;
 
@@ -51,3 +69,10 @@ const getImage = async (req, res, next) => {
 const deleteImage = async (req, res) => {};
 
 module.exports = { createImage, getImage, deleteImage };
+
+/* // For Deno
+import {
+  paginateListObjectsV2,
+  S3Client,
+  S3ClientConfig,
+} from "https://deno.land/x/aws_sdk@v3.32.0-1/client-s3/mod.ts"; */
