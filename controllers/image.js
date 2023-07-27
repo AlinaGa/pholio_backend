@@ -10,10 +10,10 @@ const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 
 const createImage = async (req, res) => {
   const { file } = req;
-  const { id, name } = req.body;
+  const { client, name } = req.body;
   const newImage = await Image.create({
-    id,
-    name,
+    name: file.filename,
+    client,
   });
   res.json(newImage);
 };
@@ -26,33 +26,27 @@ const s3 = new S3Client({
   region: bucketRegion,
 });
 const getImage = async (req, res, next) => {
-  s3.listObjects({ Bucket: bucketName })
-    .promise()
-    .then((data) => {
-      console.log(data);
-      const baseURL = BUCKET_URL;
-      let urlArr = data.Contents.map((e) => baseURL + e.key);
-      console.log(urlArr);
-    })
-    .catch((err) => console.log(err));
+  const { gallery } = req.query;
+
+  try {
+    const images = await Image.find({ gallery });
+
+    const result = [];
+    for (let i = 6; i < images.length; i++) {
+      const uploadParams = {
+        Bucket: bucketName,
+        Key: images[i].name,
+      };
+      const command = new GetObjectCommand(uploadParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      result.push({ name: images[i].name, url, _ìd: images[i]._ìd });
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
 };
-
-// const getImage = async (req, res) => {
-//   const images = await Image.find();
-//   for (let image of images) {
-//     // For each image, generate a signed URL and save it to the image object
-//     image.imageUrl = await getSignedUrl(
-//       S3Client,
-//       new GetObjectCommand({
-//         Bucket: bucketName,
-//         Key: image.imageName,
-//       }),
-//       { expiresIn: 3600 }
-//     );
-//   }
-
-//   res.send(images);
-// };
 
 const deleteImage = async (req, res) => {};
 

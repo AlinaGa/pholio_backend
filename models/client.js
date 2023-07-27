@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const clientSchema = new mongoose.Schema({
   id: "Number",
+  email: { type: String, required: true },
   name: { type: String },
   password: { type: String, required: true },
 });

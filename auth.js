@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { ErrorResponse } = require("./utilities/ErrorResponse");
 const Photographer = require("./models/photographer");
 
 //authentication
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   try {
     const { email, password, role } = req.body;
 
@@ -28,22 +29,22 @@ const signup = async (req, res) => {
     res.json({ email: newUser });
     //add function for the client to log in as well
   } catch (error) {
-    res.status(500).send(error.message);
+    next();
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password, role } = req.body;
-    // in order to get back all info and password you have to use the + before password
-    //and usually when the password select is false on the schema
+    //  +password selects info and password
+    //and usually the password select is false on the schema
     const user = await Photographer.findOne({ email }).select("+password");
 
-    if (!user) throw Error("the user doesn't exist");
+    if (!user) throw ErrorResponse("the user doesn't exist", 404);
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) throw new Error("Wrong passsword!!");
+    if (!isMatch) throw new ErrorResponse("Wrong passsword!!", 401);
 
     const payload = {
       email: user.email,
@@ -56,7 +57,7 @@ const login = async (req, res) => {
 
     res.cookie("access_token", token, { maxAge: 5000 * 600 }).json(payload);
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 const logout = async (req, res) => {
@@ -64,20 +65,20 @@ const logout = async (req, res) => {
     //NB log jst create an empty cookie with 0 time to expire immediately
     res.cookie("access_token", "", { maxAge: 0 }).end();
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 
 //getting an error cannnot set headers after thes are sent to the client
 // email is undefined???
 
-const getProfile = async (req, res) => {
+const getProfile = async (req, res, next) => {
   try {
     const { id } = req.user;
     const user = await Photographer.findById({ id });
     res.json(user);
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 

@@ -5,10 +5,6 @@ const {
   getPhotographerByCompany,
   updatePhotographer,
   deletePhotographer,
-  // login,
-  // logout,
-  // signup,
-  // getProfile,
 } = require("../controllers/photographer");
 const { verifyToken } = require("../middleswares/verifyToken");
 const { login, logout, signup, getProfile } = require("../auth");
