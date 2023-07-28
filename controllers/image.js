@@ -13,10 +13,11 @@ const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 
 const createImage = async (req, res) => {
   const { file } = req;
-  const { client, name } = req.body;
+  const { gallery } = req.body;
+
   const newImage = await Image.create({
     name: file.filename,
-    client,
+    gallery,
   });
   res.json(newImage);
 };

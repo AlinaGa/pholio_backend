@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const imageSchema = new mongoose.Schema({
   name: "String",
-  // gallery:
+  gallery: { type: mongoose.Types.ObjectId, ref: "Gallery" },
 });
 
 const image = mongoose.model("Image", imageSchema);
