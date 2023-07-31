@@ -40,7 +40,7 @@ const login = async (req, res, next) => {
     //and usually the password select is false on the schema
     const user = await Photographer.findOne({ email }).select("+password");
 
-    if (!user) throw ErrorResponse("the user doesn't exist", 404);
+    if (!user) throw new ErrorResponse("the user doesn't exist", 404);
 
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -50,6 +50,7 @@ const login = async (req, res, next) => {
       email: user.email,
       name: user.name,
       id: user._id,
+      role: user.role,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "500m",

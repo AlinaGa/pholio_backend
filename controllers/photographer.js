@@ -76,8 +76,4 @@ module.exports = {
   getPhotographerByCompany,
   updatePhotographer,
   deletePhotographer,
-  // login,
-  // logout,
-  // signup,
-  // getProfile,
 };
