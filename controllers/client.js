@@ -39,6 +39,7 @@ const createClient = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
     //  +password selects info and password
     //and usually the password select is false on the schema
     const user = await Client.findOne({ email })
