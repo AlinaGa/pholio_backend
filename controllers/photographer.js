@@ -7,7 +7,8 @@ const createPhotographer = async (req, res) => {
       name,
       email,
       password,
-      company,
+      //changes the name from company to company name
+      companyname,
       clientname,
     });
     res.json(newEntry);
