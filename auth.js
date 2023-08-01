@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { ErrorResponse } = require("./utilities/ErrorResponse");
 const Photographer = require("./models/photographer");
@@ -61,6 +61,8 @@ const login = async (req, res, next) => {
     next(error);
   }
 };
+
+
 const logout = async (req, res) => {
   try {
     //NB log jst create an empty cookie with 0 time to expire immediately
@@ -73,15 +75,31 @@ const logout = async (req, res) => {
 //getting an error cannnot set headers after thes are sent to the client
 // email is undefined???
 
+// const getProfile = async (req, res, next) => {
+//   try {
+//     const { id } = req.user;
+//     const user = await Photographer.findById({ id });
+//     res.json(user);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 const getProfile = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const user = await Photographer.findById({ id });
+    const user = await Photographer.findById(id);
+
+    if (!user) {
+      throw new ErrorResponse("User not found", 404);
+    }
+
     res.json(user);
   } catch (error) {
     next(error);
   }
 };
+
 
 module.exports = {
   login,

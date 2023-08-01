@@ -32,8 +32,8 @@ const getUserGallery = async (req, res) => {
   }
 
   try {
-    const gallaries = await Gallery.find(query);
-    res.json(gallaries);
+    const galleries = await Gallery.find(query);
+    res.json(galleries);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

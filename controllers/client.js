@@ -2,12 +2,15 @@ const Client = require("../models/client");
 
 const createClient = async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { email, name, password } = req.body;
+    console.log(email, name, password);
     const newClient = await Client.create({
+      email,
       name,
       password,
     });
     res.json(newClient);
+    console.log("req.body", req.body);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
