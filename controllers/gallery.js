@@ -2,13 +2,12 @@ const Gallery = require("../models/gallery");
 
 const createGallery = async (req, res) => {
   try {
-    const { name, date, client } = req.body;
+    const { name, date, clientId } = req.body;
     const newGallery = await Gallery.create({
       name,
       date,
       photographer: req.user.id,
-      client: req.body.client,
-
+      client: req.body.clientId,
     });
     res.json(newGallery);
   } catch (error) {
