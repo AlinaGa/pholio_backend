@@ -1,10 +1,18 @@
 const express = require("express");
 
-const { createClient, getClient } = require("../controllers/client");
+const {
+  createClient,
+  getClient,
+  login,
+  logout,
+} = require("../controllers/client");
+const { verifyToken } = require("../middleswares/verifyToken");
 
 const clientRouter = express.Router();
 
-clientRouter.post("/", createClient);
+clientRouter.post("/", verifyToken, createClient);
 clientRouter.get("/", getClient);
+clientRouter.post("/login", login);
+clientRouter.post("/logout", logout);
 
 module.exports = clientRouter;
