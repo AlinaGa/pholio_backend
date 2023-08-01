@@ -2,13 +2,12 @@ const Photographer = require("../models/photographer");
 
 const createPhotographer = async (req, res) => {
   try {
-    const { name, email, password, company, clientname } = req.body;
+    const { name, company, email, password } = req.body;
     const newEntry = await Photographer.create({
       name,
+      company,
       email,
       password,
-      company,
-      clientname,
     });
     res.json(newEntry);
     console.log("req.body", req.body);

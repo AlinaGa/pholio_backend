@@ -1,4 +1,4 @@
- const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { ErrorResponse } = require("./utilities/ErrorResponse");
 const Photographer = require("./models/photographer");
@@ -6,7 +6,7 @@ const Photographer = require("./models/photographer");
 //authentication
 const signup = async (req, res, next) => {
   try {
-    const { email, password, role } = req.body;
+    const { name, email, password, company } = req.body;
 
     const user = await Photographer.findOne({ email });
 
@@ -14,16 +14,18 @@ const signup = async (req, res, next) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const newUser = await Photographer.create({ email, password: hashed });
+    const newUser = await Photographer.create({ name, email, password: hashed, company });
     //creating a payload, means that only the email and the id will be shown  to access the rest of info you can check on the cookies and the info will be there
 
     const payload = {
-      email: newUser.email,
       name: newUser.name,
+      email: newUser.email,
+      company: newUser.company,
       id: newUser._id,
+      role: newUser.role,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "500m",
+      expiresIn: "5000m",
     });
     res.cookie("access_token", token, { maxAge: 5000 * 600 }).json(payload);
     res.json({ email: newUser });
@@ -35,7 +37,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
     //  +password selects info and password
     //and usually the password select is false on the schema
     const user = await Photographer.findOne({ email }).select("+password");
@@ -49,11 +51,12 @@ const login = async (req, res, next) => {
     const payload = {
       email: user.email,
       name: user.name,
+      company: user.company,
       id: user._id,
       role: user.role,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "500m",
+      expiresIn: "5000m",
     });
 
     res.cookie("access_token", token, { maxAge: 5000 * 600 }).json(payload);
