@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../middleswares/multer-upload");
-const { createImage, getImage, deleteImage } = require("../controllers/image");
+const { createImage, getImage, deleteImage, getThumbnail } = require("../controllers/image");
 const uploadFile = require("../middleswares/s3_middleware");
 const { verifyToken } = require("../middleswares/verifyToken");
 
@@ -15,6 +15,8 @@ imageRouter.post(
 );
 
 imageRouter.get("/", getImage);
+imageRouter.get("/thumbnail", getThumbnail);
+
 imageRouter.delete("/:id", deleteImage);
 
 module.exports = imageRouter;

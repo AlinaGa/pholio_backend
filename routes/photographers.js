@@ -18,11 +18,12 @@ photographerRouter.post("/", createPhotographer);
 photographerRouter.post("/signup", signup);
 photographerRouter.post("/login", login);
 photographerRouter.post("/logout", logout);
+photographerRouter.get("/profile", verifyToken, getProfile);
 photographerRouter.get("/", getPhotographer);
 photographerRouter.get("/clients", verifyToken, getPhotographerClients);
-photographerRouter.get("/:company", getPhotographerByCompany);
-photographerRouter.get("/profile", verifyToken, getProfile);
 photographerRouter.put("/:id", updatePhotographer);
 photographerRouter.delete("/:id", deletePhotographer);
+photographerRouter.get("/:company", getPhotographerByCompany);
+
 
 module.exports = photographerRouter;
