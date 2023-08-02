@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { ErrorResponse } = require("./utilities/ErrorResponse");
 const Photographer = require("./models/photographer");
+const Client = require("./models/client");
+
 
 //authentication
 const signup = async (req, res, next) => {
@@ -91,13 +93,13 @@ const logout = async (req, res) => {
 const getProfile = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const user = await Photographer.findById(id);
+    const photographer = await Photographer.findById(id);
+    if (photographer) return res.json(photographer);
 
-    if (!user) {
-      throw new ErrorResponse("User not found", 404);
-    }
+    const client = await Client.findById(id).populate("photographer");
+    if (client) return res.json(client);
 
-    res.json(user);
+    throw new ErrorResponse("User not found", 404);
   } catch (error) {
     next(error);
   }
