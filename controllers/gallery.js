@@ -16,8 +16,9 @@ const createGallery = async (req, res) => {
 };
 const getGallery = async (req, res) => {
   try {
-    const newGallery = await Gallery.find();
-    res.json(newGallery);
+    const { id } = req.params;
+    const gallery = await Gallery.findById(id);
+    res.json(gallery);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

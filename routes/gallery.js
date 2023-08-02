@@ -10,7 +10,7 @@ const { verifyToken } = require("../middleswares/verifyToken");
 const galleryRouter = express.Router();
 
 galleryRouter.post("/", verifyToken, createGallery);
-// galleryRouter.get("/", getGallery);
+galleryRouter.get("/:id", getGallery);
 galleryRouter.get("/", verifyToken, getUserGallery);
 
 
